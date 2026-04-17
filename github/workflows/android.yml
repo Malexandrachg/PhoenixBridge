@@ -1,0 +1,34 @@
+name: Compilador de APK en la Nube (Precompilador)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch: # Permite ejecutar el compilador manualmente
+
+jobs:
+  build:
+    name: Ensamblando la APK
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Clonando el código
+      uses: actions/checkout@v4
+
+    - name: ⚙️ Preparando el motor Android (Java 17)
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: 🔓 Dando permisos de ejecución
+      run: chmod +x gradlew
+
+    - name: 🚀 Compilando la Aplicación (APK)
+      run: ./gradlew assembleDebug
+
+    - name: 📦 Guardando la APK para Descargar
+      uses: actions/upload-artifact@v4
+      with:
+        name: PhoenixBridge-App
+        path: app/build/outputs/apk/debug/app-debug.apk
