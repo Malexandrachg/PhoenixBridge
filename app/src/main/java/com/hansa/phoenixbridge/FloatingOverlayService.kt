@@ -84,7 +84,15 @@ class FloatingOverlayService : Service(), LifecycleOwner, ViewModelStoreOwner, S
             setViewTreeLifecycleOwner(this@FloatingOverlayService)
             setViewTreeViewModelStoreOwner(this@FloatingOverlayService)
             setViewTreeSavedStateRegistryOwner(this@FloatingOverlayService)
-            setContent { }
+            setContent { 
+                androidx.compose.material3.FloatingActionButton(
+                    onClick = {
+                        android.widget.Toast.makeText(this@FloatingOverlayService, "¡Botón activado! (Pronto escanearemos)", android.widget.Toast.LENGTH_SHORT).show()
+                    }
+                ) {
+                    androidx.compose.material3.Text("🟢")
+                }
+            }
         }
         
         windowManager.addView(composeView, params)
