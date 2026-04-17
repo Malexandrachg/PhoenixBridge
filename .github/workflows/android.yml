@@ -1,0 +1,35 @@
+name: Compilador de APK en la Nube
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch: 
+
+jobs:
+  build:
+    name: Ensamblando la APK
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Clonando el código
+      uses: actions/checkout@v4
+
+    - name: ⚙️ Preparando el motor Android
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: 🔓 Dando permisos a gradlew
+      run: chmod +x gradlew
+
+    - name: 🚀 Compilando la Aplicación (APK)
+      run: ./gradlew assembleDebug
+
+    - name: 📦 Guardando APK Final
+      uses: actions/upload-artifact@v4
+      with:
+        name: PhoenixBridge-App
+        path: app/build/outputs/apk/debug/app-debug.apk
+
