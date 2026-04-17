@@ -29,7 +29,6 @@ class FloatingOverlayService : Service(), LifecycleOwner, ViewModelStoreOwner, S
     private lateinit var windowManager: WindowManager
     private lateinit var composeView: ComposeView
     
-    // Configuración mínima de un LifecycleOwner artificial para poder usar Jetpack Compose en un Servicio
     private val lifecycleRegistry = LifecycleRegistry(this)
     private val store = ViewModelStore()
     private val savedStateRegistryController = SavedStateRegistryController.create(this)
@@ -62,8 +61,9 @@ class FloatingOverlayService : Service(), LifecycleOwner, ViewModelStoreOwner, S
             manager.createNotificationChannel(channel)
         }
         val notification = NotificationCompat.Builder(this, channelId)
-            .setContentTitle("Phoenix Bridge Activo")
-            .setContentText("Botón flotante en pantalla")
+            .setContentTitle("Phoenix Bridge")
+            .setContentText("Activo")
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
             .build()
         startForeground(1, notification)
     }
@@ -84,9 +84,7 @@ class FloatingOverlayService : Service(), LifecycleOwner, ViewModelStoreOwner, S
             setViewTreeLifecycleOwner(this@FloatingOverlayService)
             setViewTreeViewModelStoreOwner(this@FloatingOverlayService)
             setViewTreeSavedStateRegistryOwner(this@FloatingOverlayService)
-            setContent {
-                // Aquí llamaremos al OcrResultDialog cuando se presione el botón flotante
-            }
+            setContent { }
         }
         
         windowManager.addView(composeView, params)
@@ -96,9 +94,7 @@ class FloatingOverlayService : Service(), LifecycleOwner, ViewModelStoreOwner, S
         super.onDestroy()
         lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         store.clear()
-        if (::composeView.isInitialized) {
-            windowManager.removeView(composeView)
-        }
+        if (::composeView.isInitialized) windowManager.removeView(composeView)
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

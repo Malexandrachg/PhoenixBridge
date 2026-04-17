@@ -28,14 +28,9 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.Center
                     ) {
-                        Text(
-                            text = "Phoenix OCR Bridge",
-                            style = MaterialTheme.typography.headlineMedium
-                        )
+                        Text(text = "Phoenix OCR Bridge", style = MaterialTheme.typography.headlineMedium)
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "Esta aplicación requiere permisos para mostrar un botón flotante sobre otras aplicaciones."
-                        )
+                        Text(text = "Esta aplicación requiere permisos de Botón Flotante (Mostrar sobre otras apps).")
                         Spacer(modifier = Modifier.height(24.dp))
                         Button(onClick = { checkOverlayPermission() }) {
                             Text("Iniciar Botón Flotante")
@@ -47,17 +42,10 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun checkOverlayPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(this)) {
-                val intent = Intent(
-                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:$packageName")
-                )
-                startActivity(intent)
-                Toast.makeText(this, "Por favor, otorga el permiso y vuelve a intentar.", Toast.LENGTH_LONG).show()
-            } else {
-                startFloatingService()
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
+            startActivity(intent)
+            Toast.makeText(this, "Otorga el permiso y vuelve", Toast.LENGTH_LONG).show()
         } else {
             startFloatingService()
         }
@@ -70,7 +58,6 @@ class MainActivity : ComponentActivity() {
         } else {
             startService(intent)
         }
-        // Cerrar la actividad principal para que el usuario quede en su pantalla
         finish()
     }
 }
