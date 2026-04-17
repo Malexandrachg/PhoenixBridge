@@ -11,23 +11,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 📥 Clonando el código
+    - name: Clonando el codigo
       uses: actions/checkout@v4
 
-    - name: ⚙️ Preparando el motor Android
+    - name: Preparando el motor Android
       uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
         cache: gradle
 
-    - name: 🔓 Dando permisos a gradlew
-      run: chmod +x gradlew
+    - name: Configurando Gradle y Compilando
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: '8.4'
+        arguments: assembleDebug
 
-    - name: 🚀 Compilando la Aplicación (APK)
-      run: ./gradlew assembleDebug
-
-    - name: 📦 Guardando APK Final
+    - name: Guardando APK Final
       uses: actions/upload-artifact@v4
       with:
         name: PhoenixBridge-App
